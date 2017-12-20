@@ -10,78 +10,47 @@ wrap = document.querySelector('.wrap'),
 buttons = document.getElementsByClassName('button'),
 squares = document.getElementsByClassName('box');
 squaresArray = Array.from(squares);
-b1 = squares[0],
-b2 = squares[1],
-b3 = squares[2],
-b4 = squares[3],
-b5 = squares[4],
-b6 = squares[5],
-b7 = squares[6],
-b8 = squares[7],
-b9 = squares[8],
+startPage = document.getElementsByClassName('screen-start')[0],
+endPage = document.getElementsByClassName('screen-win')[0],
+input1 = document.getElementById('input1'),
+input2 = document.getElementById('input2'),
 name1 = document.createElement('div'),
 name2 = document.createElement('div');
 name1.classList.add('name1');
 name2.classList.add('name2');
 
-// create start page
-const startContainer = document.createElement('div');
-startContainer.className = 'screen screen-start';
-startContainer.innerHTML = `
-<header>
-  <h1>Tic Tac Toe</h1>
-    <select id="gametype" name="gametype">
-      <option value="player">VS Player 2</option>
-      <option value="computer">VS Computer</option>
-    </select>
-  <a href="#" class="button">Start game</a>
-</header>
-`;
-
-// create end page
-const endContainer = document.createElement('div');
-endContainer.className = 'screen screen-win';
-endContainer.id = 'finish';
-endContainer.innerHTML = `
-<header>
-  <h1>Tic Tac Toe</h1>
-  <p class="message"></p>
-  <a href="#" class="button">New game</a>
-</header>
-`;
-
-// append start and end pages
-wrap.appendChild(startContainer);
-wrap.appendChild(endContainer);
 // show only start page first
 board.style.display = 'none';
-endContainer.style.display = 'none';
-startContainer.style.display = '';
+endPage.style.display = 'none';
+startPage.style.display = '';
 
 // constructor function
 function Player (icon, number) {
   this.active = false;
   this.icon = `url(img/${icon}.svg)`;
-  this.win = function () {
-    board.style.display = 'none';
-    endContainer.classList.add(`screen-win-${number}`);
-    endContainer.style.display = '';
-    document.querySelector('.message').textContent = `${(this.name || 'Computer')} wins!`
-  };
+}
+
+// to display winner
+function win (player, number) {
+  board.style.display = 'none';
+  endPage.classList.add(`screen-win-${number}`);
+  endPage.style.display = '';
+  if (player.name) {
+    document.querySelector('.message').textContent = `${(player.name)} wins!`
+  }
+  else {
+    if (player == 'computer') {
+      document.querySelector('.message').textContent = `Computer wins`
+    }
+    else {
+      document.querySelector('.message').textContent = `Winner`
+    }
+  }
 }
 
 // create players
 const player1 = new Player('o', 'one');
 const player2 = new Player('x', 'two');
-
-// to prompt players name
-function getPlayerName(id) {
-  let name = prompt(`Enter Player ${id}'s Name to proceed`);
-  while (name === null || name === '') {
-    name = prompt(`Enter Player ${id}'s' Name to proceed`);
-  }
-  return name;
-}
 
 // to calculate result
 function getWinner () {
@@ -96,133 +65,151 @@ function getWinner () {
   }
   // circle win
   if (
-    (includes(b1) == 'o' && includes(b2) == 'o' && includes(b3) == 'o') ||
-    (includes(b4) == 'o' && includes(b5) == 'o' && includes(b6) == 'o') ||
-    (includes(b7) == 'o' && includes(b8) == 'o' && includes(b9) == 'o') ||
-    (includes(b1) == 'o' && includes(b4) == 'o' && includes(b7) == 'o') ||
-    (includes(b2) == 'o' && includes(b5) == 'o' && includes(b8) == 'o') ||
-    (includes(b3) == 'o' && includes(b6) == 'o' && includes(b9) == 'o') ||
-    (includes(b1) == 'o' && includes(b5) == 'o' && includes(b9) == 'o') ||
-    (includes(b3) == 'o' && includes(b5) == 'o' && includes(b7) == 'o')) {
-      player1.win();
+    (includes(squares[0]) == 'o' && includes(squares[1]) == 'o' && includes(squares[2]) == 'o') ||
+    (includes(squares[3]) == 'o' && includes(squares[4]) == 'o' && includes(squares[5]) == 'o') ||
+    (includes(squares[6]) == 'o' && includes(squares[7]) == 'o' && includes(squares[8]) == 'o') ||
+    (includes(squares[0]) == 'o' && includes(squares[3]) == 'o' && includes(squares[6]) == 'o') ||
+    (includes(squares[1]) == 'o' && includes(squares[4]) == 'o' && includes(squares[7]) == 'o') ||
+    (includes(squares[2]) == 'o' && includes(squares[5]) == 'o' && includes(squares[8]) == 'o') ||
+    (includes(squares[0]) == 'o' && includes(squares[4]) == 'o' && includes(squares[8]) == 'o') ||
+    (includes(squares[2]) == 'o' && includes(squares[4]) == 'o' && includes(squares[6]) == 'o')) {
+      win(player1, 'one');
   }
   // cross win
   else if (
-    (includes(b1) == 'x' && includes(b2) == 'x' && includes(b3) == 'x') ||
-    (includes(b4) == 'x' && includes(b5) == 'x' && includes(b6) == 'x') ||
-    (includes(b7) == 'x' && includes(b8) == 'x' && includes(b9) == 'x') ||
-    (includes(b1) == 'x' && includes(b4) == 'x' && includes(b7) == 'x') ||
-    (includes(b2) == 'x' && includes(b5) == 'x' && includes(b8) == 'x') ||
-    (includes(b3) == 'x' && includes(b6) == 'x' && includes(b9) == 'x') ||
-    (includes(b1) == 'x' && includes(b5) == 'x' && includes(b9) == 'x') ||
-    (includes(b3) == 'x' && includes(b5) == 'x' && includes(b7) == 'x')) {
-      player2.win();
+    (includes(squares[0]) == 'x' && includes(squares[1]) == 'x' && includes(squares[2]) == 'x') ||
+    (includes(squares[3]) == 'x' && includes(squares[4]) == 'x' && includes(squares[5]) == 'x') ||
+    (includes(squares[6]) == 'x' && includes(squares[7]) == 'x' && includes(squares[8]) == 'x') ||
+    (includes(squares[0]) == 'x' && includes(squares[3]) == 'x' && includes(squares[6]) == 'x') ||
+    (includes(squares[1]) == 'x' && includes(squares[4]) == 'x' && includes(squares[7]) == 'x') ||
+    (includes(squares[2]) == 'x' && includes(squares[5]) == 'x' && includes(squares[8]) == 'x') ||
+    (includes(squares[0]) == 'x' && includes(squares[4]) == 'x' && includes(squares[8]) == 'x') ||
+    (includes(squares[2]) == 'x' && includes(squares[4]) == 'x' && includes(squares[6]) == 'x')) {
+      if (gametype.value == 'player') {
+        win(player2, 'two');
+      }
+      else {
+        win('computer', 'two')
+      }
   }
   // draw
-  if (squaresArray.filter(el => !el.className.includes('filled')).length == 0 && endContainer.style.display == 'none') {
+  if (squaresArray.filter(el => !el.className.includes('filled')).length == 0 && endPage.style.display == 'none') {
     board.style.display = 'none';
-    endContainer.style.display = '';
-    endContainer.classList.add('screen-win-tie');
+    endPage.style.display = '';
+    endPage.classList.add('screen-win-tie');
     document.querySelector('.message').textContent = "It's a draw";
   }
 }
 
-// start/new game click
-Array.from(buttons).forEach(el => {
-  el.addEventListener('click', () => {
-  // if first game set player 1 to active and set names
-  if (!player1.active && !player2.active) {
-    if (document.getElementById('gametype').value == 'player') {
-      player1.name = getPlayerName(1);
-      player2.name = getPlayerName(2);
-    }
-    else {
-      player1.name = getPlayerName(1);
-    }
-    player1.active = true;
-    name1.textContent = player1.name;
-    board1.appendChild(name1);
-    name2.textContent = player2.name;
-    board2.appendChild(name2);
+document.getElementById('gametype').addEventListener('change', () => {
+  if (document.getElementById('gametype').value == 'computer') {
+    input2.style.display = 'none';
   }
-  // hide start page
-  startContainer.style.display = 'none';
-  // if not first game, clear everything
-  endContainer.style.display = 'none';
-  endContainer.classList.remove('screen-win-one');
-  endContainer.classList.remove('screen-win-two');
-  endContainer.classList.remove('screen-win-tie');
-  squaresArray.forEach(el => {
-    el.classList.remove('box-filled-1');
-    el.classList.remove('box-filled-2');
-  })
-  // show board
-  board.style.display = '';
-  // switch highlight
-  if (player1.active) {
-    board1.classList.add('active');
-    board2.classList.remove('active');
-  } else {
-    board2.classList.add('active');
-    board1.classList.remove('active');
+  else {
+    input2.style.display = '';
   }
-
 })
-});
 
-// SQUARES MOUSEOVER
-// show circle or cross in squares when mouse over, based on which player is active
-// and if the square is not already occupied
-squaresArray.forEach(el => {
-  el.addEventListener('mouseover', () => {
-    if (player1.active && window.getComputedStyle(el).backgroundImage == 'none') {
-      el.style.backgroundImage = player1.icon
-    }
-    else if (player2.active && window.getComputedStyle(el).backgroundImage == 'none') {
-      el.style.backgroundImage = player2.icon
-    }
-});
-  el.addEventListener('mouseout', () => el.style.backgroundImage = '')
-});
 
-// SQUARES CLICK
-squaresArray.forEach(el => {
-  el.addEventListener('click', () => {
-    if (!el.className.includes('filled')) {
-      // if player VS player 2
+document.addEventListener('click', function (event) {
+  // start/new game click
+  if (event.target.className == 'button') {
+    // hide start page
+    startPage.style.display = 'none';
+    // if first game set names and active
+    if (!player1.active && !player2.active) {
       if (document.getElementById('gametype').value == 'player') {
-        // fill square and switch active player
-        if (player1.active) {
-          el.classList.add('box-filled-1');
-          player1.active = false;
-          player2.active = true;
-          board2.classList.add('active');
-          board1.classList.remove('active');
-        }
-        else if (player2.active) {
-          el.classList.add('box-filled-2')
-          player1.active = true;
-          player2.active = false;
-          board1.classList.add('active');
-          board2.classList.remove('active');
-        }
-        getWinner();
+        player1.name = input1.value;
+        player2.name = input2.value;
       }
-      // if player VS computer
       else {
-        // fill square
-        el.classList.add('box-filled-1');
+        player1.name = input1.value;
+      }
+      player1.active = true;
+      name1.textContent = player1.name;
+      board1.appendChild(name1);
+      name2.textContent = player2.name;
+      board2.appendChild(name2);
+    }
+    // if not first game, clear everything
+    endPage.style.display = 'none';
+    endPage.classList.remove('screen-win-one');
+    endPage.classList.remove('screen-win-two');
+    endPage.classList.remove('screen-win-tie');
+    squaresArray.forEach(el => {
+      el.classList.remove('box-filled-1');
+      el.classList.remove('box-filled-2');
+    })
+    // show board
+    board.style.display = '';
+    // switch highlight
+    if (player1.active) {
+      board1.classList.add('active');
+      board2.classList.remove('active');
+    } else {
+      board2.classList.add('active');
+      board1.classList.remove('active');
+    }
+  }
+
+// click on squares
+if (event.target.className == 'box') {
+  // if square is empty
+  if (!event.target.className.includes('filled')) {
+    // if player VS player 2
+    if (document.getElementById('gametype').value == 'player') {
+      // fill square and switch active player
+      if (player1.active) {
+        event.target.classList.add('box-filled-1');
+        player1.active = false;
+        player2.active = true;
+        board2.classList.add('active');
+        board1.classList.remove('active');
+      }
+      else if (player2.active) {
+        event.target.classList.add('box-filled-2')
+        player1.active = true;
+        player2.active = false;
+        board1.classList.add('active');
+        board2.classList.remove('active');
+      }
+      getWinner();
+    }
+    // if player VS computer
+    else {
+      // fill square
+      event.target.classList.add('box-filled-1');
+      getWinner();
+      // if player 1 didn't win generate a random number and fill one of the empty squares with a cross
+      if (endPage.style.display == 'none') {
+        const emptyBoxes = squaresArray.filter(el => !el.className.includes('filled'));
+        const randomNum = Math.floor(Math.random()*(emptyBoxes.length - 1));
+        emptyBoxes[randomNum].classList.add('box-filled-2');
         getWinner();
-        // if player 1 didn't win generate a random number and fill one of the empty squares with a cross
-        if (endContainer.style.display == 'none') {
-          const emptyBoxes = squaresArray.filter(el => !el.className.includes('filled'));
-          const randomNum = Math.floor(Math.random()*(emptyBoxes.length - 1));
-          emptyBoxes[randomNum].classList.add('box-filled-2');
-          getWinner();
-        }
       }
     }
-  })
+  }
+}
 })
+
+
+// squares mouseover
+document.addEventListener('mouseover', function (event) {
+  if (event.target.className == 'box') {
+    // for player 1 and if empty
+    if (player1.active && window.getComputedStyle(event.target).backgroundImage == 'none') {
+      event.target.style.backgroundImage = player1.icon
+    }
+    // for player 2 and if empty
+    else if (player2.active && window.getComputedStyle(event.target).backgroundImage == 'none') {
+      event.target.style.backgroundImage = player2.icon
+    }
+  }
+})
+// squares mouseout
+document.addEventListener('mouseout', function (event) {
+  if (event.target.className == 'box') {
+  event.target.style.backgroundImage = ''
+}})
 
 }();
