@@ -1,7 +1,5 @@
-
 !function () {
 
-// declare variables
 const board = document.getElementById('board'),
 board1 = document.getElementById('player1'),
 board2 = document.getElementById('player2'),
@@ -29,7 +27,6 @@ function Player (icon, number) {
   this.icon = `url(img/${icon}.svg)`;
 }
 
-// to display winner
 function win (player, number) {
   board.style.display = 'none';
   endPage.classList.add(`screen-win-${number}`);
@@ -51,9 +48,7 @@ function win (player, number) {
 const player1 = new Player('o', 'one');
 const player2 = new Player('x', 'two');
 
-// to calculate result
 function getWinner () {
-  // to calculate if square is filled with circle or cross
   function includes (element) {
     if (element.className.includes('1')) {
       return 'o'
@@ -62,7 +57,7 @@ function getWinner () {
       return 'x'
     }
   }
-  // circle win
+  // circle wins
   if (
     (includes(squares[0]) == 'o' && includes(squares[1]) == 'o' && includes(squares[2]) == 'o') ||
     (includes(squares[3]) == 'o' && includes(squares[4]) == 'o' && includes(squares[5]) == 'o') ||
@@ -74,7 +69,7 @@ function getWinner () {
     (includes(squares[2]) == 'o' && includes(squares[4]) == 'o' && includes(squares[6]) == 'o')) {
       win(player1, 'one');
   }
-  // cross win
+  // cross wins
   else if (
     (includes(squares[0]) == 'x' && includes(squares[1]) == 'x' && includes(squares[2]) == 'x') ||
     (includes(squares[3]) == 'x' && includes(squares[4]) == 'x' && includes(squares[5]) == 'x') ||
@@ -111,11 +106,9 @@ document.getElementById('gametype').addEventListener('change', () => {
 
 
 document.addEventListener('click', function (event) {
-  // start/new game click
+  // start/new game
   if (event.target.className == 'button') {
-    // hide start page
     startPage.style.display = 'none';
-    // if first game set names and active
     if (!player1.active && !player2.active) {
       if (document.getElementById('gametype').value == 'player') {
         player1.name = input1.value;
@@ -130,7 +123,6 @@ document.addEventListener('click', function (event) {
       name2.textContent = player2.name;
       board2.appendChild(name2);
     }
-    // if not first game, clear everything
     endPage.style.display = 'none';
     endPage.classList.remove('screen-win-one');
     endPage.classList.remove('screen-win-two');
@@ -141,7 +133,6 @@ document.addEventListener('click', function (event) {
     })
     // show board
     board.style.display = '';
-    // switch highlight
     if (player1.active) {
       board1.classList.add('active');
       board2.classList.remove('active');
@@ -151,13 +142,9 @@ document.addEventListener('click', function (event) {
     }
   }
 
-// click on squares
 if (event.target.className == 'box') {
-  // if square is empty
   if (!event.target.className.includes('filled')) {
-    // if player VS player 2
     if (document.getElementById('gametype').value == 'player') {
-      // fill square and switch active player
       if (player1.active) {
         event.target.classList.add('box-filled-1');
         player1.active = false;
@@ -174,12 +161,9 @@ if (event.target.className == 'box') {
       }
       getWinner();
     }
-    // if player VS computer
     else {
-      // fill square
       event.target.classList.add('box-filled-1');
       getWinner();
-      // if player 1 didn't win generate a random number and fill one of the empty squares with a cross
       if (endPage.style.display == 'none') {
         const emptyBoxes = squaresArray.filter(el => !el.className.includes('filled'));
         const randomNum = Math.floor(Math.random()*(emptyBoxes.length - 1));
@@ -192,20 +176,16 @@ if (event.target.className == 'box') {
 })
 
 
-// squares mouseover
 document.addEventListener('mouseover', function (event) {
   if (event.target.className == 'box') {
-    // for player 1 and if empty
     if (player1.active && window.getComputedStyle(event.target).backgroundImage == 'none') {
       event.target.style.backgroundImage = player1.icon
     }
-    // for player 2 and if empty
     else if (player2.active && window.getComputedStyle(event.target).backgroundImage == 'none') {
       event.target.style.backgroundImage = player2.icon
     }
   }
 })
-// squares mouseout
 document.addEventListener('mouseout', function (event) {
   if (event.target.className == 'box') {
   event.target.style.backgroundImage = ''
