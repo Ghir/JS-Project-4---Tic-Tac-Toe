@@ -1,1 +1,6 @@
-UI for a Tic Tac Toe game.
+### Tic Tac Toe
+A simple Tic Tac Toe game.
+
+&nbsp;
+
+![Screenshot](./tic.png)
