@@ -1,6 +1,6 @@
-### Tic Tac Toe
+## Tic Tac Toe
 
-A Tic Tac Toe game UI in Vanilla JavaScript.
+Tic Tac Toe game with Vanilla JavaScript.
 
 &nbsp;
 
